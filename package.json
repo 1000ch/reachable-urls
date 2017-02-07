@@ -1,0 +1,38 @@
+{
+  "name": "reachable-urls",
+  "version": "0.0.0",
+  "description": "Check URLs are reachable in text",
+  "main": "index.js",
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "bin": {
+    "reachable-urls": "cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1000ch/reachable-urls.git"
+  },
+  "author": "1000ch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/1000ch/reachable-urls/issues"
+  },
+  "homepage": "https://github.com/1000ch/reachable-urls#readme",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "is-reachable": "^2.2.0",
+    "is-string": "^1.0.4",
+    "log-symbols": "^1.0.2",
+    "minimist": "^1.2.0",
+    "pify": "^2.3.0",
+    "url-regex": "^4.0.0"
+  },
+  "devDependencies": {
+    "ava": "^0.18.1",
+    "xo": "^0.17.1"
+  },
+  "xo": {
+    "space": 2
+  }
+}

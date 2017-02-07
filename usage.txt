@@ -1,0 +1,6 @@
+Usage
+  $ reachable-urls [<file|glob> ...]
+
+Options
+  --help          Show help
+  --version       Show version
