@@ -20,7 +20,7 @@ if (argv.v || argv.version) {
     .pipe(process.stdout)
     .on('close', () => process.exit(1));
 } else {
-  const files = argv._.map(file => path.resolve(file));
+  const files = argv._.map(file => path.resolve(process.cwd(), file));
   const texts = Promise.all(files.map(file => fsP.readFile(file).then(b => b.toString())));
   const reachables = texts.then(texts => Promise.all(texts.map(text => reachableUrls(text))));
 
