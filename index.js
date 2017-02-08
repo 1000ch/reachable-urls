@@ -9,8 +9,13 @@ module.exports = string => {
   }
 
   const matches = string.match(urlRegex()) || [];
-  const urls = matches.map(url => url.replace(/\).+/, '')).map(url => {
+  const urls = matches.map(url => {
     const u = new URL(url);
+    const suffix = /[）)<>].*$/;
+
+    u.set('pathname', u.pathname.replace(suffix, ''));
+    u.set('query', u.query.replace(suffix, ''));
+    u.set('hash', u.hash.replace(suffix, ''));
 
     if (!u.protocol) {
       u.set('protocol', 'http:');
