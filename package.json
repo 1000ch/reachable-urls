@@ -21,6 +21,7 @@
   "homepage": "https://github.com/1000ch/reachable-urls#readme",
   "dependencies": {
     "chalk": "^1.1.3",
+    "globby": "^6.1.0",
     "is-reachable": "^2.2.0",
     "is-string": "^1.0.4",
     "log-symbols": "^1.0.2",

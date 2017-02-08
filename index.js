@@ -7,7 +7,8 @@ module.exports = string => {
     return Promise.reject({});
   }
 
-  const urls = string.match(urlRegex()) || [];
+  const matches = string.match(urlRegex()) || [];
+  const urls = matches.map(url => url.replace(/\).+/, ''));
   const reachables = urls.map(url => isReachable(url));
 
   return Promise.all(reachables).then(results => {

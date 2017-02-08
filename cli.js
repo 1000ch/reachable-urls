@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 const fsP = require('pify')(fs);
 const minimist = require('minimist');
+const globby = require('globby');
 const chalk = require('chalk');
 const symbols = require('log-symbols');
 const reachableUrls = require('.');
@@ -20,7 +21,7 @@ if (argv.v || argv.version) {
     .pipe(process.stdout)
     .on('close', () => process.exit(1));
 } else {
-  const files = argv._.map(file => path.resolve(process.cwd(), file));
+  const files = globby.sync(argv._).map(file => path.resolve(process.cwd(), file));
   const texts = Promise.all(files.map(file => fsP.readFile(file).then(b => b.toString())));
   const reachables = texts.then(texts => Promise.all(texts.map(text => reachableUrls(text))));
 
@@ -30,13 +31,16 @@ if (argv.v || argv.version) {
     results.forEach((result, index) => {
       output += `  ${chalk.underline(files[index])}\n\n`;
 
-      Object.keys(result).forEach(url => {
+      const urls = Object.keys(result);
+      urls.forEach(url => {
         const reachable = result[url];
         const symbol = reachable ? symbols.success : symbols.error;
         output += `    ${symbol} ${url}\n`;
       });
 
-      output += '\n';
+      if (urls.length !== 0) {
+        output += '\n';
+      }
     });
 
     console.log(output);
