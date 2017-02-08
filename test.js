@@ -16,3 +16,8 @@ test('Check some URLs are reachable', async t => {
     'https://foobarbaz.com': false
   });
 });
+
+test('Check text which does not contain URLs', async t => {
+  const string = 'Lorem ipsum';
+  t.deepEqual(await reachableUrls(string), {});
+});
