@@ -1,3 +1,4 @@
+const URL = require('url-parse');
 const urlRegex = require('url-regex');
 const isString = require('is-string');
 const isReachable = require('is-reachable');
@@ -8,7 +9,15 @@ module.exports = string => {
   }
 
   const matches = string.match(urlRegex()) || [];
-  const urls = matches.map(url => url.replace(/\).+/, ''));
+  const urls = matches.map(url => url.replace(/\).+/, '')).map(url => {
+    const u = new URL(url);
+
+    if (!u.protocol) {
+      u.set('protocol', 'http:');
+    }
+
+    return u.toString();
+  });
   const reachables = urls.map(url => isReachable(url));
 
   return Promise.all(reachables).then(results => {
