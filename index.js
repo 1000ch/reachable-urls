@@ -5,7 +5,7 @@ const isReachable = require('is-reachable');
 
 module.exports = string => {
   if (!isString(string)) {
-    return Promise.reject({});
+    return Promise.resolve({});
   }
 
   const matches = string.match(urlRegex()) || [];
@@ -23,13 +23,21 @@ module.exports = string => {
 
     return u.toString();
   });
-  const reachables = urls.map(url => isReachable(url));
 
-  return Promise.all(reachables).then(results => {
-    const object = {};
-    urls.forEach((url, index) => {
-      object[url] = results[index];
+  if (urls.length === 0) {
+    return Promise.resolve({});
+  }
+
+  const object = {};
+  return urls.reduce((previous, current, index) => {
+    return previous.then(result => {
+      object[urls[index]] = result;
+
+      if (urls.length - 1 === index) {
+        return Promise.resolve(object);
+      }
+
+      return isReachable(urls[index + 1]);
     });
-    return object;
-  });
+  }, isReachable(urls[0]));
 };
