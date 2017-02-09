@@ -36,8 +36,7 @@ const output = (object, verbose = false) => {
 const argv = minimist(process.argv.slice(2), {
   alias: {
     h: 'help',
-    v: 'version',
-    V: 'verbose'
+    v: 'verbose'
   },
   boolean: [
     'help',
@@ -46,7 +45,7 @@ const argv = minimist(process.argv.slice(2), {
   ]
 });
 
-if (argv.v || argv.version) {
+if (argv.version) {
   console.log(require('./package').version);
 } else if (argv.h || argv.help) {
   fs.createReadStream(`${__dirname}/usage.txt`)
@@ -64,6 +63,6 @@ if (argv.v || argv.version) {
       object[file] = results[files.indexOf(file)];
     }
 
-    output(object, argv.verbose);
+    output(object, argv.v || argv.verbose);
   });
 }
