@@ -11,7 +11,7 @@ module.exports = string => {
   const matches = string.match(urlRegex()) || [];
   const urls = matches.map(url => {
     const u = new URL(url);
-    const suffix = /[）)<>].*$/;
+    const suffix = /[）)<>、。'"`;を].*$/;
 
     u.set('pathname', u.pathname.replace(suffix, ''));
     u.set('query', u.query.replace(suffix, ''));
