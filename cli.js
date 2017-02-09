@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const fsP = require('pify')(fs);
 const minimist = require('minimist');
+const ora = require('ora');
 const globby = require('globby');
 const chalk = require('chalk');
 const symbols = require('log-symbols');
@@ -53,9 +54,14 @@ if (argv.version) {
     .pipe(process.stdout)
     .on('close', () => process.exit(1));
 } else {
+  let count = 0;
+  const spinner = ora('Checking files').start();
   const files = globby.sync(argv._).map(file => path.resolve(process.cwd(), file));
   const texts = Promise.all(files.map(file => fsP.readFile(file).then(b => b.toString())));
-  const reachables = texts.then(texts => Promise.all(texts.map(text => reachableUrls(text))));
+  const reachables = texts.then(texts => Promise.all(texts.map(text => reachableUrls(text).then(result => {
+    spinner.text = `Checking files [${++count} of ${files.length}]`;
+    return result;
+  }))));
 
   reachables.then(results => {
     const object = {};
@@ -64,6 +70,8 @@ if (argv.version) {
       object[file] = results[files.indexOf(file)];
     }
 
+    spinner.stop();
     output(object, argv.v || argv.compact);
+    process.exit(0);
   });
 }
