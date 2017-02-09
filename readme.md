@@ -22,9 +22,9 @@ Usage
   $ reachable-urls [<file|glob> ...]
 
 Options
+  --compact       Show only not-reachable URLs
   --help          Show help
   --version       Show version
-  --verbose       Show all results including reachable URLs
 ```
 
 ### JavaScript

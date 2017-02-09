@@ -9,7 +9,7 @@ const chalk = require('chalk');
 const symbols = require('log-symbols');
 const reachableUrls = require('.');
 
-const output = (object, verbose = false) => {
+const output = (object, compact = false) => {
   let output = '\n';
 
   for (const file of Object.keys(object)) {
@@ -17,7 +17,7 @@ const output = (object, verbose = false) => {
 
     const result = object[file];
     const urls = Object.keys(result);
-    const filteredUrls = verbose ? urls : urls.filter(url => !result[url]);
+    const filteredUrls = compact ? urls.filter(url => !result[url]) : urls;
 
     for (const url of filteredUrls) {
       const reachable = result[url];
@@ -35,13 +35,14 @@ const output = (object, verbose = false) => {
 
 const argv = minimist(process.argv.slice(2), {
   alias: {
+    c: 'compact',
     h: 'help',
-    v: 'verbose'
+    v: 'version'
   },
   boolean: [
+    'compact',
     'help',
-    'version',
-    'verbose'
+    'version'
   ]
 });
 
@@ -63,6 +64,6 @@ if (argv.version) {
       object[file] = results[files.indexOf(file)];
     }
 
-    output(object, argv.v || argv.verbose);
+    output(object, argv.v || argv.compact);
   });
 }
