@@ -24,6 +24,7 @@ Usage
 Options
   --help          Show help
   --version       Show version
+  --verbose       Show all results including reachable URLs
 ```
 
 ### JavaScript

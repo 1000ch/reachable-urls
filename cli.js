@@ -9,9 +9,34 @@ const chalk = require('chalk');
 const symbols = require('log-symbols');
 const reachableUrls = require('.');
 
+const output = (object, verbose = false) => {
+  let output = '\n';
+
+  for (const file of Object.keys(object)) {
+    output += `  ${chalk.underline(file)}\n\n`;
+
+    const result = object[file];
+    const urls = Object.keys(result);
+    const filteredUrls = verbose ? urls : urls.filter(url => !result[url]);
+
+    for (const url of filteredUrls) {
+      const reachable = result[url];
+      const symbol = reachable ? symbols.success : symbols.error;
+      output += `    ${symbol} ${url}\n`;
+    }
+
+    if (filteredUrls.length !== 0) {
+      output += '\n';
+    }
+  }
+
+  console.log(output);
+};
+
 const argv = minimist(process.argv.slice(2), {
+  h: 'help',
   v: 'version',
-  h: 'help'
+  V: 'verbose'
 });
 
 if (argv.v || argv.version) {
@@ -26,23 +51,12 @@ if (argv.v || argv.version) {
   const reachables = texts.then(texts => Promise.all(texts.map(text => reachableUrls(text))));
 
   reachables.then(results => {
-    let output = '\n';
+    const object = {};
 
-    results.forEach((result, index) => {
-      output += `  ${chalk.underline(files[index])}\n\n`;
+    for (const file of files) {
+      object[file] = results[files.indexOf(file)];
+    }
 
-      const urls = Object.keys(result);
-      urls.forEach(url => {
-        const reachable = result[url];
-        const symbol = reachable ? symbols.success : symbols.error;
-        output += `    ${symbol} ${url}\n`;
-      });
-
-      if (urls.length !== 0) {
-        output += '\n';
-      }
-    });
-
-    console.log(output);
+    output(object, argv.verbose);
   });
 }
