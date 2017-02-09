@@ -34,9 +34,16 @@ const output = (object, verbose = false) => {
 };
 
 const argv = minimist(process.argv.slice(2), {
-  h: 'help',
-  v: 'version',
-  V: 'verbose'
+  alias: {
+    h: 'help',
+    v: 'version',
+    V: 'verbose'
+  },
+  boolean: [
+    'help',
+    'version',
+    'verbose'
+  ]
 });
 
 if (argv.v || argv.version) {
