@@ -10,7 +10,7 @@ const chalk = require('chalk');
 const symbols = require('log-symbols');
 const reachableUrls = require('.');
 
-const output = (object, compact = false) => {
+const format = (object, compact = false) => {
   let output = '\n';
 
   for (const file of Object.keys(object)) {
@@ -31,7 +31,7 @@ const output = (object, compact = false) => {
     }
   }
 
-  console.log(output);
+  return output;
 };
 
 const argv = minimist(process.argv.slice(2), {
@@ -47,7 +47,7 @@ const argv = minimist(process.argv.slice(2), {
   ]
 });
 
-if (argv.version) {
+if (argv.v || argv.version) {
   console.log(require('./package').version);
 } else if (argv.h || argv.help) {
   fs.createReadStream(`${__dirname}/usage.txt`)
@@ -55,23 +55,37 @@ if (argv.version) {
     .on('close', () => process.exit(1));
 } else {
   let count = 0;
+  let files = [];
   const spinner = ora('Checking files').start();
-  const files = globby.sync(argv._).map(file => path.resolve(process.cwd(), file));
-  const texts = Promise.all(files.map(file => fsP.readFile(file).then(b => b.toString())));
-  const reachables = texts.then(texts => Promise.all(texts.map(text => reachableUrls(text).then(result => {
-    spinner.text = `Checking files [${++count} of ${files.length}]`;
-    return result;
-  }))));
 
-  reachables.then(results => {
-    const object = {};
+  globby(argv._)
+    .then(foundFiles => {
+      return foundFiles.map(file => path.resolve(process.cwd(), file));
+    })
+    .then(foundFiles => {
+      files = foundFiles;
 
-    for (const file of files) {
-      object[file] = results[files.indexOf(file)];
-    }
+      return Promise.all(foundFiles.map(file => {
+        return fsP.readFile(file).then(b => b.toString());
+      }));
+    })
+    .then(texts => {
+      return Promise.all(texts.map(text => {
+        return reachableUrls(text).then(result => {
+          spinner.text = `Checking files [${++count} of ${files.length}]`;
 
-    spinner.stop();
-    output(object, argv.v || argv.compact);
-    process.exit(0);
-  });
+          return result;
+        });
+      }));
+    })
+    .then(results => {
+      const object = {};
+      files.forEach((file, index) => {
+        object[file] = results[index];
+      });
+
+      spinner.stop();
+      console.log(format(object, argv.c || argv.compact));
+      process.exit(0);
+    });
 }
