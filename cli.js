@@ -10,6 +10,8 @@ const chalk = require('chalk');
 const symbols = require('log-symbols');
 const reachableUrls = require('.');
 
+const symbol = reachable => reachable ? symbols.success : symbols.error;
+
 const format = (object, compact = false) => {
   let output = '\n';
 
@@ -17,16 +19,14 @@ const format = (object, compact = false) => {
     output += `  ${chalk.underline(file)}\n\n`;
 
     const result = object[file];
-    const urls = Object.keys(result);
-    const filteredUrls = compact ? urls.filter(url => !result[url]) : urls;
+    const keys = Object.keys(result);
+    const urls = compact ? keys.filter(url => !result[url]) : keys;
 
-    for (const url of filteredUrls) {
-      const reachable = result[url];
-      const symbol = reachable ? symbols.success : symbols.error;
-      output += `    ${symbol} ${url}\n`;
+    for (const url of urls) {
+      output += `    ${symbol(result[url])} ${url}\n`;
     }
 
-    if (filteredUrls.length !== 0) {
+    if (urls.length !== 0) {
       output += '\n';
     }
   }
