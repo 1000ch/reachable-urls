@@ -34,6 +34,20 @@ const format = (object, compact = false) => {
   return output;
 };
 
+const getExitCode = (object = {}) => {
+  for (const file of Object.keys(object)) {
+    const result = object[file];
+
+    for (const url of Object.keys(result)) {
+      if (!result[url]) {
+        return 1;
+      }
+    }
+  }
+
+  return 0;
+};
+
 const argv = minimist(process.argv.slice(2), {
   alias: {
     c: 'compact',
@@ -84,8 +98,11 @@ if (argv.v || argv.version) {
         object[file] = results[index];
       });
 
+      const output = format(object, argv.c || argv.compact);
+      const exitCode = getExitCode(object);
+
       spinner.stop();
-      console.log(format(object, argv.c || argv.compact));
-      process.exit(0);
+      console.log(output);
+      process.exit(exitCode);
     });
 }
