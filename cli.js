@@ -10,9 +10,9 @@ const chalk = require('chalk');
 const symbols = require('log-symbols');
 const reachableUrls = require('.');
 
-const symbol = reachable => reachable ? symbols.success : symbols.error;
+const getSymbol = reachable => reachable ? symbols.success : symbols.error;
 
-const format = (object, compact = false) => {
+const formatResult = (object, compact = false) => {
   let output = '\n';
 
   for (const file of Object.keys(object)) {
@@ -23,7 +23,7 @@ const format = (object, compact = false) => {
     const urls = compact ? keys.filter(url => !result[url]) : keys;
 
     for (const url of urls) {
-      output += `    ${symbol(result[url])} ${url}\n`;
+      output += `    ${getSymbol(result[url])} ${url}\n`;
     }
 
     if (urls.length !== 0) {
@@ -99,7 +99,7 @@ if (argv.v || argv.version) {
         object[file] = results[index];
       });
 
-      const output = format(object, argv.c || argv.compact);
+      const output = formatResult(object, argv.c || argv.compact);
       const exitCode = (argv.s || argv.silent) ? 0 : getExitCode(object);
 
       spinner.stop();
