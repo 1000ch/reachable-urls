@@ -52,6 +52,7 @@ const argv = minimist(process.argv.slice(2), {
   alias: {
     c: 'compact',
     h: 'help',
+    s: 'silent',
     v: 'version'
   },
   boolean: [
@@ -99,7 +100,7 @@ if (argv.v || argv.version) {
       });
 
       const output = format(object, argv.c || argv.compact);
-      const exitCode = getExitCode(object);
+      const exitCode = (argv.s || argv.silent) ? 0 : getExitCode(object);
 
       spinner.stop();
       console.log(output);

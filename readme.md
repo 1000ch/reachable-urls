@@ -26,6 +26,7 @@ Usage
 Options
   --compact       Show only not-reachable URLs
   --help          Show help
+  --silent        Exit with success always
   --version       Show version
 ```
 
