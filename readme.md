@@ -33,13 +33,15 @@ Options
 ### JavaScript
 
 ```javascript
+const assert = require('assert');
 const reachableUrls = require('reachable-urls');
-console.log(reachableUrls('https://foobarbaz.com https://github.com'));
 
-// {
-//   'https://github.com': true,
-//   'https://foobarbaz.com': false
-// }
+reachableUrls('https://foobarbaz.com https://github.com').then(result => {
+  assert.deepEqual(result, {
+    'https://github.com': true,
+    'https://foobarbaz.com': false
+  });
+});
 ```
 
 ## License
