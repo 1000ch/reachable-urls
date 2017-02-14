@@ -48,32 +48,16 @@ const getExitCode = (object = {}) => {
   return 0;
 };
 
-const argv = minimist(process.argv.slice(2), {
-  alias: {
-    c: 'compact',
-    h: 'help',
-    s: 'silent',
-    v: 'version'
-  },
-  boolean: [
-    'compact',
-    'help',
-    'version'
-  ]
-});
+const getVersion = () => Promise.resolve(require('./package').version);
 
-if (argv.v || argv.version) {
-  console.log(require('./package').version);
-} else if (argv.h || argv.help) {
-  fs.createReadStream(`${__dirname}/usage.txt`)
-    .pipe(process.stdout)
-    .on('close', () => process.exit(1));
-} else {
+const getHelp = () => fsP.readFile(`./usage.txt`).then(b => b.toString());
+
+const getResult = args => {
   let count = 0;
   let files = [];
   const spinner = ora('Checking files').start();
 
-  globby(argv._)
+  return globby(args)
     .then(foundFiles => {
       return foundFiles.map(file => path.resolve(process.cwd(), file));
     })
@@ -94,16 +78,41 @@ if (argv.v || argv.version) {
       }));
     })
     .then(results => {
-      const object = {};
-      files.forEach((file, index) => {
-        object[file] = results[index];
-      });
-
-      const output = formatResult(object, argv.c || argv.compact);
-      const exitCode = (argv.s || argv.silent) ? 0 : getExitCode(object);
-
       spinner.stop();
-      console.log(output);
-      process.exit(exitCode);
+
+      const result = {};
+      files.forEach((file, index) => {
+        result[file] = results[index];
+      });
+      return result;
     });
+};
+
+const argv = minimist(process.argv.slice(2), {
+  alias: {
+    c: 'compact',
+    h: 'help',
+    s: 'silent',
+    v: 'version'
+  },
+  boolean: [
+    'compact',
+    'help',
+    'silent',
+    'version'
+  ]
+});
+
+if (argv.v || argv.version) {
+  getVersion().then(version => console.log(version));
+} else if (argv.h || argv.help) {
+  getHelp().then(help => console.log(help));
+} else {
+  getResult(argv._).then(result => {
+    const output = formatResult(result, argv.c || argv.compact);
+    const exitCode = (argv.s || argv.silent) ? 0 : getExitCode(result);
+
+    console.log(output);
+    process.exit(exitCode);
+  });
 }
