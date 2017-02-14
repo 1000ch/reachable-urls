@@ -3,9 +3,13 @@ const urlRegex = require('url-regex');
 const isString = require('is-string');
 const isReachable = require('is-reachable');
 
-module.exports = string => {
-  if (!isString(string)) {
-    return Promise.resolve({});
+module.exports = arg => {
+  let string = '';
+
+  if (isString(arg)) {
+    string = arg;
+  } else if (Buffer.isBuffer(arg)) {
+    string = arg.toString();
   }
 
   const matches = string.match(urlRegex()) || [];

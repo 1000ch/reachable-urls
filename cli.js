@@ -50,7 +50,7 @@ const getExitCode = (object = {}) => {
 
 const getVersion = () => Promise.resolve(require('./package').version);
 
-const getHelp = () => fsP.readFile(`./usage.txt`).then(b => b.toString());
+const getHelp = () => fsP.readFile(`./usage.txt`);
 
 const getResult = args => {
   let count = 0;
@@ -65,7 +65,7 @@ const getResult = args => {
       files = foundFiles;
 
       return Promise.all(foundFiles.map(file => {
-        return fsP.readFile(file).then(b => b.toString());
+        return fsP.readFile(file);
       }));
     })
     .then(texts => {
