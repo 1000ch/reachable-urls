@@ -17,7 +17,7 @@ module.exports = string => {
     }
 
     return u;
-  }).filter(url => url.protocol.includes('http')).map(url => {
+  }).filter(url => /https?/.test(url.protocol)).map(url => {
     const suffix = /[^a-zA-Z0-9/+\-_?#=:.].*$/;
 
     url.set('pathname', url.pathname.replace(suffix, ''));
