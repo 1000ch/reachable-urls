@@ -4,7 +4,7 @@
   "description": "Check URLs are reachable in text",
   "main": "index.js",
   "scripts": {
-    "test": "xo && ava"
+    "test": "xo && ava --verbose"
   },
   "bin": {
     "reachable-urls": "cli.js"

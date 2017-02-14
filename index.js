@@ -11,17 +11,20 @@ module.exports = string => {
   const matches = string.match(urlRegex()) || [];
   const urls = matches.map(url => {
     const u = new URL(url);
-    const suffix = /[^a-zA-Z0-9/+\-_?#=:.].*$/;
-
-    u.set('pathname', u.pathname.replace(suffix, ''));
-    u.set('query', u.query.replace(suffix, ''));
-    u.set('hash', u.hash.replace(suffix, ''));
 
     if (!u.protocol) {
       u.set('protocol', 'http:');
     }
 
-    return u.toString();
+    return u;
+  }).filter(url => url.protocol.includes('http')).map(url => {
+    const suffix = /[^a-zA-Z0-9/+\-_?#=:.].*$/;
+
+    url.set('pathname', url.pathname.replace(suffix, ''));
+    url.set('query', url.query.replace(suffix, ''));
+    url.set('hash', url.hash.replace(suffix, ''));
+
+    return url.toString();
   });
 
   if (urls.length === 0) {
