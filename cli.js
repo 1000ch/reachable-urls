@@ -57,35 +57,33 @@ const getResult = args => {
   let files = [];
   const spinner = ora('Checking files').start();
 
-  return globby(args)
-    .then(foundFiles => {
-      return foundFiles.map(file => path.resolve(process.cwd(), file));
-    })
-    .then(foundFiles => {
-      files = foundFiles;
+  return globby(args, {
+    nodir: true
+  }).then(foundFiles => {
+    return foundFiles.map(file => path.resolve(process.cwd(), file));
+  }).then(foundFiles => {
+    files = foundFiles;
 
-      return Promise.all(foundFiles.map(file => {
-        return fsP.readFile(file);
-      }));
-    })
-    .then(texts => {
-      return Promise.all(texts.map(text => {
-        return reachableUrls(text).then(result => {
-          spinner.text = `Checking files [${++count} of ${files.length}]`;
+    return Promise.all(foundFiles.map(file => {
+      return fsP.readFile(file);
+    }));
+  }).then(texts => {
+    return Promise.all(texts.map(text => {
+      return reachableUrls(text).then(result => {
+        spinner.text = `Checking files [${++count} of ${files.length}]`;
 
-          return result;
-        });
-      }));
-    })
-    .then(results => {
-      spinner.stop();
-
-      const result = {};
-      files.forEach((file, index) => {
-        result[file] = results[index];
+        return result;
       });
-      return result;
+    }));
+  }).then(results => {
+    spinner.stop();
+
+    const result = {};
+    files.forEach((file, index) => {
+      result[file] = results[index];
     });
+    return result;
+  });
 };
 
 const argv = minimist(process.argv.slice(2), {
@@ -114,5 +112,5 @@ if (argv.v || argv.version) {
 
     console.log(output);
     process.exit(exitCode);
-  });
+  }).catch(err => console.error(err));
 }
