@@ -86,6 +86,11 @@ const getResult = args => {
   });
 };
 
+process.once('uncaughtException', err => {
+  console.error(err);
+  process.exit(1);
+});
+
 const argv = minimist(process.argv.slice(2), {
   alias: {
     c: 'compact',
