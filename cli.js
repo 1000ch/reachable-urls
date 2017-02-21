@@ -112,5 +112,8 @@ if (argv.v || argv.version) {
 
     console.log(output);
     process.exit(exitCode);
-  }).catch(err => console.error(err));
+  }).catch(err => {
+    console.error(err);
+    process.exit(1);
+  });
 }
