@@ -10,7 +10,7 @@ const chalk = require('chalk');
 const symbols = require('log-symbols');
 const reachableUrls = require('.');
 
-const getSymbol = reachable => reachable ? symbols.success : symbols.error;
+const getSymbol = isReachable => isReachable ? symbols.success : symbols.error;
 
 const formatResult = (object, compact = false) => {
   let output = '\n';
@@ -50,7 +50,7 @@ const getExitCode = (object = {}) => {
 
 const getVersion = () => Promise.resolve(require('./package').version);
 
-const getHelp = () => fsP.readFile(`./usage.txt`);
+const getHelp = () => fsP.readFile(`${__dirname}/usage.txt`);
 
 const getResult = args => {
   let count = 0;
