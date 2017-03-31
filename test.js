@@ -16,7 +16,7 @@ test('Check string', async t => {
 });
 
 test('Check also buffer', async t => {
-  const buffer = new Buffer([
+  const buffer = Buffer.from([
     'https://foobarbaz.com',
     'https://github.com'
   ].join(' '));

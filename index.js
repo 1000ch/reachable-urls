@@ -3,16 +3,20 @@ const urlRegex = require('url-regex');
 const isString = require('is-string');
 const isReachable = require('is-reachable');
 
-module.exports = arg => {
-  let string = '';
-
+const stringify = arg => {
   if (isString(arg)) {
-    string = arg;
-  } else if (Buffer.isBuffer(arg)) {
-    string = arg.toString();
+    return arg;
   }
 
-  const matches = string.match(urlRegex()) || [];
+  if (Buffer.isBuffer(arg)) {
+    return arg.toString();
+  }
+
+  return '';
+};
+
+module.exports = arg => {
+  const matches = stringify(arg).match(urlRegex()) || [];
   const urls = matches.map(url => {
     const u = new URL(url);
 

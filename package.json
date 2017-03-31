@@ -32,8 +32,8 @@
     "url-regex": "^4.0.0"
   },
   "devDependencies": {
-    "ava": "^0.18.1",
-    "xo": "^0.17.1"
+    "ava": "*",
+    "xo": "*"
   },
   "xo": {
     "space": 2
