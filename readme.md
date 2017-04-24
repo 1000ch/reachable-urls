@@ -27,6 +27,7 @@ Options
   --compact       Show only not-reachable URLs
   --help          Show help
   --silent        Exit with success always
+  --stdin         Check string from stdin
   --version       Show version
 ```
 

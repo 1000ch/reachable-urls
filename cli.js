@@ -6,6 +6,7 @@ const fsP = require('pify')(fs);
 const minimist = require('minimist');
 const ora = require('ora');
 const globby = require('globby');
+const getStdin = require('get-stdin');
 const chalk = require('chalk');
 const symbols = require('log-symbols');
 const reachableUrls = require('.');
@@ -110,6 +111,15 @@ if (argv.v || argv.version) {
   getVersion().then(version => console.log(version));
 } else if (argv.h || argv.help) {
   getHelp().then(help => console.log(help));
+} else if (argv.stdin) {
+  getStdin().then(string => reachableUrls(string)).then(object => {
+    const result = {'': object};
+    const output = formatResult(result, argv.c || argv.compact);
+    const exitCode = (argv.s || argv.silent) ? 0 : getExitCode(result);
+
+    console.log(output);
+    process.exit(exitCode);
+  });
 } else {
   getResult(argv._).then(result => {
     const output = formatResult(result, argv.c || argv.compact);
