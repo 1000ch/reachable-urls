@@ -6,8 +6,9 @@
   "scripts": {
     "test": "xo && ava --verbose"
   },
-  "bin": {
-    "reachable-urls": "cli.js"
+  "bin": "cli.js",
+  "engines": {
+    "node": ">=6"
   },
   "repository": {
     "type": "git",
