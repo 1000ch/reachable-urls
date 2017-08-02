@@ -49,10 +49,6 @@ const getExitCode = (object = {}) => {
   return 0;
 };
 
-const getVersion = () => Promise.resolve(require('./package').version);
-
-const getHelp = () => fsP.readFile(`${__dirname}/usage.txt`);
-
 const getResult = args => {
   let count = 0;
   let files = [];
@@ -108,9 +104,9 @@ const argv = minimist(process.argv.slice(2), {
 });
 
 if (argv.v || argv.version) {
-  getVersion().then(version => console.log(version));
+  console.log(require('./package').version);
 } else if (argv.h || argv.help) {
-  getHelp().then(help => console.log(help));
+  fsP.readFile(`${__dirname}/usage.txt`).then(help => console.log(help.toString()));
 } else if (argv.stdin) {
   getStdin().then(string => reachableUrls(string)).then(object => {
     const result = {'': object};
