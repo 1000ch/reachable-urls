@@ -28,14 +28,14 @@
     "is-string": "^1.0.4",
     "log-symbols": "^2.2.0",
     "minimist": "^1.2.0",
-    "ora": "^2.1.0",
+    "ora": "^3.0.0",
     "pify": "^3.0.0",
     "url-parse": "^1.4.0",
     "url-regex": "^4.1.0"
   },
   "devDependencies": {
-    "ava": "*",
-    "xo": "*"
+    "ava": "^0.25.0",
+    "xo": "^0.21.1"
   },
   "xo": {
     "space": 2
