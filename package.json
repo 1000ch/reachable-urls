@@ -30,7 +30,7 @@
     "minimist": "^1.2.0",
     "ora": "^3.0.0",
     "pify": "^3.0.0",
-    "url-parse": "^1.4.0",
+    "url-parse": "^1.4.3",
     "url-regex": "^4.1.0"
   },
   "devDependencies": {
