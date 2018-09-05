@@ -49,38 +49,28 @@ const getExitCode = (object = {}) => {
   return 0;
 };
 
-const getResult = args => {
-  let count = 0;
-  let files = [];
+const getResult = async args => {
   const spinner = ora('Checking files').start();
+  const foundFiles = await globby(args, {nodir: true});
+  const files = foundFiles.map(file => path.resolve(process.cwd(), file));
+  const texts = await Promise.all(foundFiles.map(file => fsP.readFile(file)));
 
-  return globby(args, {
-    nodir: true
-  }).then(foundFiles => {
-    return foundFiles.map(file => path.resolve(process.cwd(), file));
-  }).then(foundFiles => {
-    files = foundFiles;
+  let count = 0;
+  const results = await Promise.all(texts.map(text => {
+    return reachableUrls(text).then(result => {
+      spinner.text = `Checking files [${++count} of ${files.length}]`;
 
-    return Promise.all(foundFiles.map(file => {
-      return fsP.readFile(file);
-    }));
-  }).then(texts => {
-    return Promise.all(texts.map(text => {
-      return reachableUrls(text).then(result => {
-        spinner.text = `Checking files [${++count} of ${files.length}]`;
-
-        return result;
-      });
-    }));
-  }).then(results => {
-    spinner.stop();
-
-    const result = {};
-    files.forEach((file, index) => {
-      result[file] = results[index];
+      return result;
     });
-    return result;
+  }));
+
+  spinner.stop();
+
+  const result = {};
+  files.forEach((file, index) => {
+    result[file] = results[index];
   });
+  return result;
 };
 
 process.once('uncaughtException', err => {
@@ -103,28 +93,33 @@ const argv = minimist(process.argv.slice(2), {
   ]
 });
 
-if (argv.v || argv.version) {
-  console.log(require('./package').version);
-} else if (argv.h || argv.help) {
-  fsP.readFile(`${__dirname}/usage.txt`).then(help => console.log(help.toString()));
-} else if (argv.stdin) {
-  getStdin().then(string => reachableUrls(string)).then(object => {
+(async () => {
+  if (argv.v || argv.version) {
+    console.log(require('./package').version);
+  } else if (argv.h || argv.help) {
+    const help = await fsP.readFile(`${__dirname}/usage.txt`);
+
+    console.log(help.toString());
+  } else if (argv.stdin) {
+    const string = await getStdin();
+    const object = await reachableUrls(string);
     const result = {'': object};
     const output = formatResult(result, argv.c || argv.compact);
     const exitCode = (argv.s || argv.silent) ? 0 : getExitCode(result);
 
     console.log(output);
     process.exit(exitCode);
-  });
-} else {
-  getResult(argv._).then(result => {
-    const output = formatResult(result, argv.c || argv.compact);
-    const exitCode = (argv.s || argv.silent) ? 0 : getExitCode(result);
+  } else {
+    try {
+      const result = await getResult(argv._);
+      const output = formatResult(result, argv.c || argv.compact);
+      const exitCode = (argv.s || argv.silent) ? 0 : getExitCode(result);
 
-    console.log(output);
-    process.exit(exitCode);
-  }).catch(err => {
-    console.error(err);
-    process.exit(1);
-  });
-}
+      console.log(output);
+      process.exit(exitCode);
+    } catch (error) {
+      console.error(error);
+      process.exit(1);
+    }
+  }
+})();

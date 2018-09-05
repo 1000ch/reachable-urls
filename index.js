@@ -40,15 +40,14 @@ module.exports = arg => {
   }
 
   const object = {};
-  return urls.reduce((previous, current, index) => {
-    return previous.then(result => {
-      object[urls[index]] = result;
+  return urls.reduce(async (previous, current, index) => {
+    const result = await previous;
+    object[urls[index]] = result;
 
-      if (urls.length - 1 === index) {
-        return Promise.resolve(object);
-      }
+    if (urls.length - 1 === index) {
+      return Promise.resolve(object);
+    }
 
-      return isReachable(urls[index + 1]);
-    });
+    return isReachable(urls[index + 1]);
   }, isReachable(urls[0]));
 };
