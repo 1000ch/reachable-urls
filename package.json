@@ -24,7 +24,7 @@
     "chalk": "^2.4.0",
     "get-stdin": "^6.0.0",
     "globby": "^8.0.1",
-    "is-reachable": "^2.4.0",
+    "is-reachable": "^3.0.0",
     "is-string": "^1.0.4",
     "log-symbols": "^2.2.0",
     "minimist": "^1.2.0",
