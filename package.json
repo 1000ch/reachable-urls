@@ -23,7 +23,7 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "get-stdin": "^7.0.0",
-    "globby": "^9.2.0",
+    "globby": "^10.0.0",
     "is-reachable": "^3.1.0",
     "is-string": "^1.0.4",
     "log-symbols": "^3.0.0",
