@@ -44,7 +44,6 @@ test('Check string which does not contain URLs', async t => {
 
 test('Remove needless URL suffixes', async t => {
   const strings = [
-    'https://google.com/+shogosensui[',
     'https://github.com/1000ch(',
     'https://twitter.com/jxck_<',
     'https://facebook.com#hash"',
@@ -54,7 +53,6 @@ test('Remove needless URL suffixes', async t => {
   ];
 
   t.deepEqual(await reachableUrls(strings.join(' ')), {
-    'https://google.com/+shogosensui': true,
     'https://github.com/1000ch': true,
     'https://twitter.com/jxck_': true,
     'https://facebook.com#hash': true,
