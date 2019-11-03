@@ -8,7 +8,7 @@
   },
   "bin": "cli.js",
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "repository": {
     "type": "git",
@@ -24,18 +24,18 @@
     "chalk": "^2.4.2",
     "get-stdin": "^7.0.0",
     "globby": "^10.0.0",
-    "is-reachable": "^3.1.0",
+    "is-reachable": "^4.0.0",
     "is-string": "^1.0.4",
     "log-symbols": "^3.0.0",
     "minimist": "^1.2.0",
-    "ora": "^3.4.0",
+    "ora": "^4.0.0",
     "pify": "^4.0.1",
     "url-parse": "^1.4.7",
     "url-regex": "^5.0.0"
   },
   "devDependencies": {
     "ava": "^2.0.0",
-    "xo": "^0.24.0"
+    "xo": "^0.25.0"
   },
   "xo": {
     "space": 2
