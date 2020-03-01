@@ -29,13 +29,13 @@
     "log-symbols": "^3.0.0",
     "minimist": "^1.2.0",
     "ora": "^4.0.3",
-    "pify": "^4.0.1",
+    "pify": "^5.0.0",
     "url-parse": "^1.4.7",
     "url-regex": "^5.0.0"
   },
   "devDependencies": {
-    "ava": "^2.4.0",
-    "xo": "^0.25.3"
+    "ava": "^3.4.0",
+    "xo": "^0.27.2"
   },
   "xo": {
     "space": 2
