@@ -26,7 +26,7 @@ module.exports = arg => {
 
     return u;
   }).filter(url => /https?/.test(url.protocol)).map(url => {
-    const suffix = /[^a-zA-Z0-9/+\-_?#=:.].*$/;
+    const suffix = /[^\w/+\-?#=:.].*$/;
 
     url.set('pathname', url.pathname.replace(suffix, ''));
     url.set('query', url.query.replace(suffix, ''));
