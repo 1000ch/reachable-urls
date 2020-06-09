@@ -1,6 +1,6 @@
 {
   "name": "reachable-urls",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Check URLs are reachable in text",
   "main": "index.js",
   "scripts": {
