@@ -40,6 +40,8 @@ module.exports = arg => {
   }
 
   const object = {};
+
+  /* eslint-disable-next-line unicorn/no-reduce */
   return urls.reduce(async (previous, current, index) => {
     const result = await previous;
     object[urls[index]] = result;

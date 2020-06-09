@@ -21,21 +21,20 @@
   },
   "homepage": "https://github.com/1000ch/reachable-urls#readme",
   "dependencies": {
-    "chalk": "^4.0.0",
+    "chalk": "^4.1.0",
     "get-stdin": "^8.0.0",
-    "globby": "^11.0.0",
+    "globby": "^11.0.1",
     "is-reachable": "^4.0.0",
     "is-string": "^1.0.5",
     "log-symbols": "^4.0.0",
     "minimist": "^1.2.5",
-    "ora": "^4.0.3",
-    "pify": "^5.0.0",
+    "ora": "^4.0.4",
     "url-parse": "^1.4.7",
     "url-regex": "^5.0.0"
   },
   "devDependencies": {
-    "ava": "^3.5.0",
-    "xo": "^0.30.0"
+    "ava": "^3.8.0",
+    "xo": "^0.32.0"
   },
   "xo": {
     "space": 2

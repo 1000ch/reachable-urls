@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-
+const {promisify} = require('util');
 const path = require('path');
 const fs = require('fs');
-const fsP = require('pify')(fs);
 const minimist = require('minimist');
 const ora = require('ora');
 const globby = require('globby');
@@ -11,6 +10,7 @@ const chalk = require('chalk');
 const symbols = require('log-symbols');
 const reachableUrls = require('.');
 
+const readFile = promisify(fs.readFile);
 const getSymbol = isReachable => isReachable ? symbols.success : symbols.error;
 
 const formatResult = (object, compact = false) => {
@@ -53,7 +53,7 @@ const getResult = async args => {
   const spinner = ora('Checking files').start();
   const foundFiles = await globby(args, {nodir: true});
   const files = foundFiles.map(file => path.resolve(process.cwd(), file));
-  const texts = await Promise.all(foundFiles.map(file => fsP.readFile(file)));
+  const texts = await Promise.all(foundFiles.map(file => readFile(file)));
 
   let count = 0;
   const results = await Promise.all(texts.map(text => {
@@ -97,7 +97,7 @@ const argv = minimist(process.argv.slice(2), {
   if (argv.v || argv.version) {
     console.log(require('./package').version);
   } else if (argv.h || argv.help) {
-    const help = await fsP.readFile(`${__dirname}/usage.txt`);
+    const help = await readFile(path.resolve(__dirname, './usage.txt'));
 
     console.log(help.toString());
   } else if (argv.stdin) {
