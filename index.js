@@ -1,7 +1,7 @@
-const URL = require('url-parse');
-const urlRegex = require('url-regex');
-const isString = require('is-string');
-const isReachable = require('is-reachable');
+import URL from 'url-parse';
+import urlRegex from 'url-regex';
+import isString from 'is-string';
+import isReachable from 'is-reachable';
 
 const stringify = arg => {
   if (isString(arg)) {
@@ -15,7 +15,7 @@ const stringify = arg => {
   return '';
 };
 
-module.exports = arg => {
+export default function reachableUrls(arg) {
   const matches = stringify(arg).match(urlRegex()) || [];
   const urls = matches.map(url => {
     const u = new URL(url);
@@ -41,7 +41,7 @@ module.exports = arg => {
 
   const object = {};
 
-  /* eslint-disable-next-line unicorn/no-reduce */
+  /* eslint-disable-next-line unicorn/no-array-reduce */
   return urls.reduce(async (previous, current, index) => {
     const result = await previous;
     object[urls[index]] = result;
@@ -52,4 +52,4 @@ module.exports = arg => {
 
     return isReachable(urls[index + 1]);
   }, isReachable(urls[0]));
-};
+}

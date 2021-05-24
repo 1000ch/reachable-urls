@@ -1,5 +1,5 @@
-const test = require('ava');
-const reachableUrls = require('.');
+import test from 'ava';
+import reachableUrls from './index.js';
 
 test('Check string', async t => {
   const strings = [

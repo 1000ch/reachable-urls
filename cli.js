@@ -1,16 +1,14 @@
 #!/usr/bin/env node
-const {promisify} = require('util');
-const path = require('path');
-const fs = require('fs');
-const minimist = require('minimist');
-const ora = require('ora');
-const globby = require('globby');
-const getStdin = require('get-stdin');
-const chalk = require('chalk');
-const symbols = require('log-symbols');
-const reachableUrls = require('.');
+import path from 'node:path';
+import {promises as fs} from 'node:fs';
+import minimist from 'minimist';
+import ora from 'ora';
+import globby from 'globby';
+import getStdin from 'get-stdin';
+import chalk from 'chalk';
+import symbols from 'log-symbols';
+import reachableUrls from './index.js';
 
-const readFile = promisify(fs.readFile);
 const getSymbol = isReachable => isReachable ? symbols.success : symbols.error;
 
 const formatResult = (object, compact = false) => {
@@ -27,7 +25,7 @@ const formatResult = (object, compact = false) => {
       output += `    ${getSymbol(result[url])} ${url}\n`;
     }
 
-    if (urls.length !== 0) {
+    if (urls.length > 0) {
       output += '\n';
     }
   }
@@ -53,7 +51,7 @@ const getResult = async args => {
   const spinner = ora('Checking files').start();
   const foundFiles = await globby(args, {nodir: true});
   const files = foundFiles.map(file => path.resolve(process.cwd(), file));
-  const texts = await Promise.all(foundFiles.map(file => readFile(file)));
+  const texts = await Promise.all(foundFiles.map(file => fs.readFile(file)));
 
   let count = 0;
   const results = await Promise.all(texts.map(text => {
@@ -67,14 +65,15 @@ const getResult = async args => {
   spinner.stop();
 
   const result = {};
-  files.forEach((file, index) => {
+  for (const [index, file] of files.entries()) {
     result[file] = results[index];
-  });
+  }
+
   return result;
 };
 
-process.once('uncaughtException', err => {
-  console.error(err);
+process.once('uncaughtException', error => {
+  console.error(error);
   process.exit(1);
 });
 
@@ -95,11 +94,13 @@ const argv = minimist(process.argv.slice(2), {
 
 (async () => {
   if (argv.v || argv.version) {
-    console.log(require('./package').version);
-  } else if (argv.h || argv.help) {
-    const help = await readFile(path.resolve(__dirname, './usage.txt'));
+    const json = JSON.parse(await fs.readFile('package.json', 'utf-8'));
 
-    console.log(help.toString());
+    console.log(json.version);
+  } else if (argv.h || argv.help) {
+    const help = await fs.readFile('usage.txt', 'utf-8');
+
+    console.log(help);
   } else if (argv.stdin) {
     const string = await getStdin();
     const object = await reachableUrls(string);
