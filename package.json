@@ -22,15 +22,14 @@
     "space": 2
   },
   "dependencies": {
-    "chalk": "^4.1.0",
-    "get-stdin": "^8.0.0",
-    "globby": "^11.0.1",
-    "is-reachable": "^4.0.0",
+    "chalk": "^4.1.1",
+    "get-stdin": "^9.0.0",
+    "globby": "^11.0.3",
+    "is-reachable": "^5.0.0",
     "is-string": "^1.0.5",
-    "log-symbols": "^4.0.0",
+    "log-symbols": "^5.0.0",
     "minimist": "^1.2.5",
-    "ora": "^4.0.4",
-    "url-parse": "^1.4.7",
+    "ora": "^5.4.0",
     "url-regex": "^5.0.0"
   },
   "devDependencies": {
