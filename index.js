@@ -1,4 +1,3 @@
-import URL from 'url-parse';
 import urlRegex from 'url-regex';
 import isString from 'is-string';
 import isReachable from 'is-reachable';
@@ -21,16 +20,16 @@ export default function reachableUrls(arg) {
     const u = new URL(url);
 
     if (!u.protocol) {
-      u.set('protocol', 'http:');
+      u.protocol = 'https:';
     }
 
     return u;
   }).filter(url => /https?/.test(url.protocol)).map(url => {
     const suffix = /[^\w/+\-?#=:.].*$/;
 
-    url.set('pathname', url.pathname.replace(suffix, ''));
-    url.set('query', url.query.replace(suffix, ''));
-    url.set('hash', url.hash.replace(suffix, ''));
+    url.pathname = url.pathname?.replace(suffix, '');
+    url.query = url.query?.replace(suffix, '');
+    url.hash = url.hash?.replace(suffix, '');
 
     return url.toString();
   });
