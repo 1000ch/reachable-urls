@@ -1,11 +1,6 @@
-# reachable-urls
+# reachable-urls ![GitHub Actions Status](https://github.com/1000ch/reachable-urls/workflows/test/badge.svg?branch=main)
 
 Check URLs are reachable in text.
-
-![GitHub Actions Status](https://github.com/1000ch/reachable-urls/workflows/test/badge.svg?branch=master)
-[![NPM version](https://badge.fury.io/js/reachable-urls.svg)](http://badge.fury.io/js/reachable-urls)
-[![Dependency Status](https://david-dm.org/1000ch/reachable-urls.svg)](https://david-dm.org/1000ch/reachable-urls)
-[![devDependency Status](https://david-dm.org/1000ch/reachable-urls/dev-status.svg)](https://david-dm.org/1000ch/reachable-urls?type=dev)
 
 ![screenshot](screenshot.gif)
 

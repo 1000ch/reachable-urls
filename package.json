@@ -11,10 +11,19 @@
     "url": "git+https://github.com/1000ch/reachable-urls.git"
   },
   "license": "MIT",
-  "author": "1000ch",
+  "author": {
+    "name": "Shogo Sensui",
+    "email": "shogosensui@gmail.com",
+    "url": "http://github.com/1000ch"
+  },
   "type": "module",
-  "main": "index.js",
+  "exports": "./index.js",
   "bin": "cli.js",
+  "files": [
+    "cli.js",
+    "index.js",
+    "usage.txt"
+  ],
   "scripts": {
     "test": "xo && ava --verbose"
   },
