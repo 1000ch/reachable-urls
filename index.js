@@ -1,3 +1,4 @@
+import {Buffer} from 'node:buffer';
 import urlRegex from 'url-regex';
 import isString from 'is-string';
 import isReachable from 'is-reachable';

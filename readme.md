@@ -29,8 +29,8 @@ Options
 ### JavaScript
 
 ```javascript
-const assert = require('assert');
-const reachableUrls = require('reachable-urls');
+import assert from 'assert';
+import reachableUrls from 'reachable-urls';
 
 reachableUrls('https://foobarbaz.com https://github.com').then(result => {
   assert.deepEqual(result, {

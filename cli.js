@@ -1,6 +1,7 @@
 #!/usr/bin/env node
+import fs from 'node:fs/promises';
 import path from 'node:path';
-import {promises as fs} from 'node:fs';
+import process from 'node:process';
 import minimist from 'minimist';
 import ora from 'ora';
 import globby from 'globby';
@@ -54,6 +55,8 @@ const getResult = async args => {
   const texts = await Promise.all(foundFiles.map(file => fs.readFile(file)));
 
   let count = 0;
+
+  // eslint-disable-next-line arrow-body-style
   const results = await Promise.all(texts.map(text => {
     return reachableUrls(text).then(result => {
       spinner.text = `Checking files [${++count} of ${files.length}]`;
@@ -82,14 +85,14 @@ const argv = minimist(process.argv.slice(2), {
     c: 'compact',
     h: 'help',
     s: 'silent',
-    v: 'version'
+    v: 'version',
   },
   boolean: [
     'compact',
     'help',
     'silent',
-    'version'
-  ]
+    'version',
+  ],
 });
 
 (async () => {
