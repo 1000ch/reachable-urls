@@ -4,7 +4,7 @@ import path from 'node:path';
 import process from 'node:process';
 import minimist from 'minimist';
 import ora from 'ora';
-import globby from 'globby';
+import {globby} from 'globby';
 import getStdin from 'get-stdin';
 import chalk from 'chalk';
 import symbols from 'log-symbols';
