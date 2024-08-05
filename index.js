@@ -3,26 +3,23 @@ import urlRegex from 'url-regex';
 import isString from 'is-string';
 import isReachable from 'is-reachable';
 
-const stringify = arg => {
-  if (isString(arg)) {
-    return arg;
+const stringify = object => {
+  if (isString(object)) {
+    return object;
   }
 
-  if (Buffer.isBuffer(arg)) {
-    return arg.toString();
+  if (Buffer.isBuffer(object)) {
+    return object.toString();
   }
 
   return '';
 };
 
-export default function reachableUrls(arg) {
-  const matches = stringify(arg).match(urlRegex()) || [];
+export default function reachableUrls(url) {
+  const matches = stringify(url).match(urlRegex()) || [];
   const urls = matches.map(url => {
     const u = new URL(url);
-
-    if (!u.protocol) {
-      u.protocol = 'https:';
-    }
+    u.protocol ||= 'https:';
 
     return u;
   }).filter(url => /https?/.test(url.protocol)).map(url => {
@@ -47,7 +44,7 @@ export default function reachableUrls(arg) {
     object[urls[index]] = result;
 
     if (urls.length - 1 === index) {
-      return Promise.resolve(object);
+      return object;
     }
 
     return isReachable(urls[index + 1]);
