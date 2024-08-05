@@ -1,4 +1,4 @@
-# reachable-urls ![GitHub Actions Status](https://github.com/1000ch/reachable-urls/workflows/test/badge.svg?branch=main)
+# reachable-urls [![test](https://github.com/1000ch/reachable-urls/actions/workflows/test.yml/badge.svg)](https://github.com/1000ch/reachable-urls/actions/workflows/test.yml)
 
 Check URLs are reachable in text.
 
