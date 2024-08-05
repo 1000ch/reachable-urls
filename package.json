@@ -1,6 +1,6 @@
 {
   "name": "reachable-urls",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Check URLs are reachable in text",
   "homepage": "https://github.com/1000ch/reachable-urls#readme",
   "bugs": {
