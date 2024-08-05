@@ -48,9 +48,9 @@ const getExitCode = (object = {}) => {
   return 0;
 };
 
-const getResult = async args => {
+const getResult = async paths => {
   const spinner = ora('Checking files').start();
-  const foundFiles = await globby(args, {nodir: true});
+  const foundFiles = await globby(paths, {nodir: true});
   const files = foundFiles.map(file => path.resolve(process.cwd(), file));
   const texts = await Promise.all(foundFiles.map(file => fs.readFile(file)));
 
@@ -95,35 +95,33 @@ const argv = minimist(process.argv.slice(2), {
   ],
 });
 
-(async () => {
-  if (argv.v || argv.version) {
-    const json = JSON.parse(await fs.readFile('package.json', 'utf-8'));
+if (argv.v || argv.version) {
+  const json = JSON.parse(await fs.readFile('package.json', 'utf8'));
 
-    console.log(json.version);
-  } else if (argv.h || argv.help) {
-    const help = await fs.readFile('usage.txt', 'utf-8');
+  console.log(json.version);
+} else if (argv.h || argv.help) {
+  const help = await fs.readFile('usage.txt', 'utf8');
 
-    console.log(help);
-  } else if (argv.stdin) {
-    const string = await getStdin();
-    const object = await reachableUrls(string);
-    const result = {'': object};
+  console.log(help);
+} else if (argv.stdin) {
+  const string = await getStdin();
+  const object = await reachableUrls(string);
+  const result = {'': object};
+  const output = formatResult(result, argv.c || argv.compact);
+  const exitCode = (argv.s || argv.silent) ? 0 : getExitCode(result);
+
+  console.log(output);
+  process.exit(exitCode);
+} else {
+  try {
+    const result = await getResult(argv._);
     const output = formatResult(result, argv.c || argv.compact);
     const exitCode = (argv.s || argv.silent) ? 0 : getExitCode(result);
 
     console.log(output);
     process.exit(exitCode);
-  } else {
-    try {
-      const result = await getResult(argv._);
-      const output = formatResult(result, argv.c || argv.compact);
-      const exitCode = (argv.s || argv.silent) ? 0 : getExitCode(result);
-
-      console.log(output);
-      process.exit(exitCode);
-    } catch (error) {
-      console.error(error);
-      process.exit(1);
-    }
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
   }
-})();
+}
